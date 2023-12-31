@@ -1,0 +1,27 @@
+{
+  "name": "altify-health",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "axios": "^1.6.3",
+    "next": "14.0.4",
+    "react": "^18",
+    "react-dom": "^18",
+    "stripe": "^14.10.0"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.23.3",
+    "@babel/preset-react": "^7.23.3",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
+  }
+}
