@@ -1,16 +1,17 @@
-import cors from "cors"
-import express from "express"
-const app = express();
+import dotenv from "dotenv"
+import app from "./app.js";
 
-app.use(cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true
-}))
+// dotenv.config({
+//     path: '.env'
+// });
+dotenv.config()
 
 const PORT = process.env.PORT || 5100;
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
-
-export default app
+try {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+} catch (error) {
+    console.log(error, "error while connecting to server");
+}

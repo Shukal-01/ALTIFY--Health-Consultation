@@ -1,0 +1,146 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model DietChart {
+  id          String  @id @default(cuid()) @db.VarChar(36)
+  userId      String
+  dietitianId String
+  title       String
+  description String
+  meals       String?
+  snacks      String?
+  // You can add more fields based on your requirements, such as meals, snacks, etc.
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User      @relation(fields: [userId], references: [id])
+  dietitian Dietitian @relation(fields: [dietitianId], references: [id])
+}
+
+model UserProfile {
+  id               String   @id @default(cuid()) @db.VarChar(36)
+  userId           String   @unique
+  weight           Int
+  height           Float
+  anyMedication    String
+  foodAllergie     String
+  occupation       String
+  dietryPrefrences String
+  fitnessGoal      String
+  user             User     @relation(fields: [userId], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Admin {
+  id          String    @id @default(cuid()) @db.VarChar(36)
+  fullName    String
+  userName    String
+  email       String    @unique
+  password    String
+  age         String
+  phoneNumber String
+  dateOfBirth DateTime? // Optional date of birth
+  gender      String // Optional gender
+  picture     String? // Optional URL to the admin's picture
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model User {
+  id           String        @id @default(cuid()) @db.VarChar(36)
+  fullName     String
+  age          String
+  gender       String
+  phoneNumber  String
+  Address      String
+  email        String        @unique
+  password     String
+  dietChart    DietChart[]
+  profile      UserProfile?
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  // conversations  Conversation[]  @relation("userConversations")
+}
+
+model Dietitian {
+  id             String        @id @default(cuid()) @db.VarChar(36)
+  fullName       String
+  email          String        @unique
+  password       String
+  age            Int
+  gender         String
+  phoneNumber    String
+  accountNumber  String
+  address        String
+  specialization String
+  salary         String
+  appointments   Appointment[]
+  dietChart      DietChart[]
+  // conversations   Conversation[] @relation("dietitianConversations")
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+// model Conversation {
+//   id            String        @id @default(cuid()) @db.VarChar(36)
+//   participants  Participant[]
+//   messages      Message[]
+//   createdAt     DateTime      @default(now())
+//   updatedAt     DateTime      @updatedAt
+// }
+
+// model Participant {
+//   // id             String        @id @default(cuid()) @db.VarChar(36)
+//   conversation   Conversation  @relation(fields: [conversationId], references: [id])
+//   conversationId String
+//   user           User?         @relation(fields: [userId], references: [id])
+//   userId         String?       
+//   dietitian      Dietitian?    @relation(fields: [dietitianId], references: [id])
+//   dietitianId    String?  
+//   role           Role
+//   createdAt      DateTime      @default(now())
+//   updatedAt      DateTime      @updatedAt
+//   @@unique([conversationId, role])
+// }
+
+// model Message {
+//   id              String        @id @default(cuid()) @db.VarChar(36) 
+//   conversation   Conversation   @relation(fields: [conversationId], references: [id])
+//   conversationId String
+//   sender         Participant   @relation(fields: [senderId], references: [id])
+//   senderId       String
+//   content        String
+//   timestamp      DateTime      @default(now())
+//   createdAt      DateTime      @default(now())
+//   updatedAt      DateTime      @updatedAt
+// }
+
+// enum Role {
+//   USER
+//   DIETITIAN
+// }
+
+model Appointment {
+  id          String    @id @default(cuid()) @db.VarChar(36)
+  dietitianId String
+  userId      String
+  date        DateTime
+  note        String?
+  status      String
+  // Add any other appointment details
+  dietitian   Dietitian @relation(fields: [dietitianId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
