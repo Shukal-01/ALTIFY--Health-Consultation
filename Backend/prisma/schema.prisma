@@ -70,8 +70,12 @@ model User {
   appointments Appointment[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  // sentMessages Messages[] @relation("sentMessages")
+  // recievedMessages Messages[] @relation("recievedMessages")
   // conversations  Conversation[]  @relation("userConversations")
 }
+
+
 
 model Dietitian {
   id             String        @id @default(cuid()) @db.VarChar(36)
@@ -86,11 +90,28 @@ model Dietitian {
   specialization String
   salary         String
   appointments   Appointment[]
+  // dsentMessages Messages[] @relation("dsentMessages")
+  // drecievedMessages Messages[] @relation("drecievedMessages")
   dietChart      DietChart[]
   // conversations   Conversation[] @relation("dietitianConversations")
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 }
+// model Messages {
+//   id Int @id @default(autoincrement())
+//   sender User @relation("sentMessages", fields:[senderId], references:[id])
+//   senderId String
+//   reciever User @relation("recievedMessages", fields:[recieverId], references:[id])
+//   recieverId String
+//   dsender Dietitian @relation("dsentMessages", fields:[dsenderId], references:[id])
+//   dsenderId String
+//   dreciever Dietitian @relation("drecievedMessages", fields:[drecieverId], references:[id])
+//   drecieverId String
+//   type String @default("text")
+//   message String
+//   messageStatus String @default("sent")
+//   createdAt DateTime @default(now())
+// }
 
 // model Conversation {
 //   id            String        @id @default(cuid()) @db.VarChar(36)

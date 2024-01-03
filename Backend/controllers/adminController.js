@@ -45,10 +45,49 @@ export const createAdmin = async (req, res) => {
 //         res.status(500).json({ error: 'Internal Server Error' });
 //     }
 // }
-export const getAllAdmins = async (req, res) => {
+export const getAdmin = async (req, res) => {
     try {
         const admins = await prisma.admin.findMany();
         res.json(admins);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+
+export const updateAdmin = async (req, res) => {
+    try {
+        let adminId = req.params.id;
+        const { fullName, username, email, password, age, phoneNumber, dateOfBirth, gender, picture } = req.body;
+
+        // Check if the admin exists
+        const existingAdmin = await prisma.admin.findUnique({
+            where: { id: adminId },  // Use adminId here
+        });
+
+        if (!existingAdmin) {
+            return res.status(404).json({ error: 'Admin not found' });
+        }
+
+        // Update admin details (use adminId directly here as well)
+        const updatedAdmin = await prisma.admin.update({
+            where: { id: adminId },  // Corrected here
+            data: {
+                fullName,
+                username,
+                email,
+                password: await bcrypt.hash(password, 10),
+                age,
+                phoneNumber,
+                dateOfBirth: new Date(dateOfBirth),
+                gender,
+                picture,
+            },
+        });
+
+        res.status(200).json({ admin: updatedAdmin, message: "Admin details updated" });
+        console.log(updatedAdmin);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
